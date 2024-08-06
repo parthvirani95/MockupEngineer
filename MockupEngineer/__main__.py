@@ -49,7 +49,7 @@ class Main:
             '{} {} ({}) [{}]'.format(a.manufacturer, a.name, a.resolution, a.year), self.select_color, (a.id,)) for
             num, a
             in enumerate(self.mockup.get_templates()[category]['templates'])},
-                  var0=('Back', self.select_category, ()))
+            var0=('Back', self.select_category, ()))
 
     def select_color(self, template_id):
         cls()
@@ -60,17 +60,20 @@ class Main:
             var0=('Back', self.select_template, (template.type,)))
 
     def enter_path(self, color: str, template: Device):
-        self.input('Enter the path to the screenshot: ', self.generate, (color, template))
+        self.input('Enter the path to the screenshot: ',
+                   self.generate, (color, template))
 
     def generate(self, path: str, color: str, template: Device):
+        print(path)
         if not os.path.isfile(path):
-            return self.input('File does not exist, try again: ', self.generate, (color, template))
+            return self.input('File does not exist, try again: '+path, self.generate, (color, template))
         if not (path.lower().endswith('.png') or path.lower().endswith('.jpg') or path.lower().endswith('.jpeg')):
             return self.input('MockupEngineer supports .png and .jpeg screenshots, try again: ', self.generate,
                               (color, template))
         cls()
         print('Generating...')
-        url = self.mockup.generate(screenshot_path=path, template_id=template.id, color=color, external_storage=True)
+        url = self.mockup.generate(
+            screenshot_path=path, template_id=template.id, color=color, external_storage=True)
         cls()
         print('Success: {}'.format(url))
         webbrowser.open(url)
